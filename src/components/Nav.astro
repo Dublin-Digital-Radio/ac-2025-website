@@ -1,4 +1,6 @@
 ---
+import Link from "./Link.astro";
+
 const routes = [
   {
     href: "/",
@@ -16,7 +18,7 @@ const routes = [
     {
       routes.map((route) => (
         <li class="me-8">
-          <a href={route.href}>{route.text}</a>
+          <Link href={route.href}>{route.text}</Link>
         </li>
       ))
     }
