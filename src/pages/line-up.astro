@@ -1,0 +1,31 @@
+---
+import type { MarkdownInstance } from "astro";
+import Layout from "../layouts/Layout.astro";
+
+interface LineUpFrontMatter {
+  title: string;
+}
+
+const acts = Object.values(
+  import.meta.glob<MarkdownInstance<LineUpFrontMatter>>(
+    "../content/line-up/*.md",
+    {
+      eager: true,
+    }
+  )
+);
+---
+
+<Layout>
+  <main class="px-gutter">
+    <h1 class="font-bold">Line-Up</h1>
+    {
+      acts.map(({ frontmatter, Content }) => (
+        <>
+          <h2>{frontmatter.title}</h2>
+          <Content />
+        </>
+      ))
+    }
+  </main>
+</Layout>

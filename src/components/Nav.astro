@@ -1,0 +1,24 @@
+---
+const routes = [
+  {
+    href: "/",
+    text: "Home",
+  },
+  {
+    href: "/line-up",
+    text: "Line-Up",
+  },
+];
+---
+
+<nav>
+  <ul class="flex">
+    {
+      routes.map((route) => (
+        <li class="me-8">
+          <a href={route.href}>{route.text}</a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
