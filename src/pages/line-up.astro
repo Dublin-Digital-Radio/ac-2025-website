@@ -1,29 +1,21 @@
 ---
-import type { MarkdownInstance } from "astro";
+import { marked } from "marked";
+
 import Layout from "../layouts/Layout.astro";
 
-interface LineUpFrontMatter {
-  title: string;
-}
-
-const acts = Object.values(
-  import.meta.glob<MarkdownInstance<LineUpFrontMatter>>(
-    "../content/line-up/*.md",
-    {
-      eager: true,
-    }
-  )
-);
+const artists = await fetch(`${import.meta.env.API_SERVER}/api/artists`)
+  .then((response) => response.json())
+  .then((response) => response.data);
 ---
 
 <Layout>
   <main class="px-gutter">
     <h1 class="font-bold">Line-Up</h1>
     {
-      acts.map(({ frontmatter, Content }) => (
+      artists.map((artist: any) => (
         <>
-          <h2>{frontmatter.title}</h2>
-          <Content />
+          <h2>{artist.name}</h2>
+          <div set:html={marked.parse(artist.description)} />
         </>
       ))
     }
