@@ -5,6 +5,17 @@
 }
 
 @layer base {
+  @font-face {
+    font-family: Alte Haas Grotesk;
+    font-weight: normal;
+    src: url(/ac-2025-website-prototype-astro/fonts/Alte-Haas-Grotesk.ttf.woff)
+      format("woff");
+  }
+
+  body {
+    font-family: Alte Haas Grotesk;
+  }
+
   h1,
   h2 {
     font-weight: var(--font-weight-bold);
