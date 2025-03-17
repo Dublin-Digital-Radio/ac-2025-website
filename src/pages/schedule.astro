@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const events = await fetch(
+  `${import.meta.env.API_SERVER}/api/events?populate=*`
+)
+  .then((response) => response.json())
+  .then((response) => response.data);
+---
+
+<Layout>
+  <main class="px-gutter">
+    <h1 class="font-bold">Schedule</h1>
+    {
+      events.map((event: any) => (
+        <>
+          <h2>{event.name}</h2>
+          <h3>{event.artists.map((artist: any) => artist.name).join(", ")}</h3>
+          <h3>{event.venue.name}</h3>
+        </>
+      ))
+    }
+  </main>
+</Layout>
