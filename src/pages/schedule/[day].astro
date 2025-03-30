@@ -52,7 +52,9 @@ const events = await fetch(
           <h2>{event.name}</h2>
           <h3>{event.artists.map((artist) => artist.name).join(", ")}</h3>
           <h3>{event.venue.name}</h3>
-          <div set:html={marked.parse(event.description)} />
+          {event.description ? (
+            <div set:html={marked.parse(event.description)} />
+          ) : null}
         </>
       ))
     }

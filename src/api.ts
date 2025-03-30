@@ -16,6 +16,6 @@ export const eventListSchema = z.array(
     name: z.string(),
     artists: artistListSchema,
     venue: venueSchema,
-    description: z.string(),
+    description: z.string().nullable(),
   })
 );
