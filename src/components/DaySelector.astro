@@ -1,0 +1,24 @@
+---
+import Link from "./Link.astro";
+
+interface Props {
+  day: string;
+}
+
+const { day } = Astro.props;
+---
+
+<div class="flex justify-between">
+  <div class:list={["underline", { "font-bold": day === "2025-05-01" }]}>
+    <Link href="/schedule/2025-05-01"> Thu, May 1</Link>
+  </div>
+  <div class:list={["underline", { "font-bold": day === "2025-05-02" }]}>
+    <Link href="/schedule/2025-05-02"> Fri, May 2</Link>
+  </div>
+  <div class:list={["underline", { "font-bold": day === "2025-05-03" }]}>
+    <Link href="/schedule/2025-05-03"> Sat, May 3</Link>
+  </div>
+  <div class:list={["underline", { "font-bold": day === "2025-05-04" }]}>
+    <Link href="/schedule/2025-05-04"> Sun, May 4</Link>
+  </div>
+</div>
