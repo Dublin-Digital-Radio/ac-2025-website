@@ -1,10 +1,10 @@
 ---
 export function getStaticPaths() {
   return [
-    { params: { day: "2025-05-01" } },
-    { params: { day: "2025-05-02" } },
-    { params: { day: "2025-05-03" } },
-    { params: { day: "2025-05-04" } },
+    { params: { day: "may-1" } },
+    { params: { day: "may-2" } },
+    { params: { day: "may-3" } },
+    { params: { day: "may-4" } },
   ];
 }
 
@@ -23,17 +23,8 @@ const events = await fetch(
   `${import.meta.env.API_SERVER}/api/events?${qs.stringify({
     populate: "*",
     filters: {
-      startsAt: {
-        $gte: DateTime.fromISO(day)
-          .setZone("Europe/Dublin")
-          .startOf("day")
-          .toISO(),
-      },
-      endsAt: {
-        $lte: DateTime.fromISO(day)
-          .setZone("Europe/Dublin")
-          .endOf("day")
-          .toISO(),
+      scheduleDay: {
+        $eq: day,
       },
     },
   })}`

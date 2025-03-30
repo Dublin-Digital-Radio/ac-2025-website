@@ -10,7 +10,7 @@ export default defineConfig({
   site: "https://dublin-digital-radio.github.io",
   base,
   redirects: {
-    "/schedule": `/${base}/schedule/2025-05-01`,
+    "/schedule": `/${base}/schedule/may-1`,
   },
   vite: {
     plugins: [tailwindcss()],
