@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-  --spacing-gutter: 16rem;
-}
-
 @layer base {
   @font-face {
     font-family: Alte Haas Grotesk;

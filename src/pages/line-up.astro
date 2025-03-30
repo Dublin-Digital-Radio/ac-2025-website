@@ -3,6 +3,7 @@ import { marked } from "marked";
 
 import Layout from "../layouts/Layout.astro";
 import { artistListSchema } from "../api";
+import PageContainer from "../components/PageContainer.astro";
 
 const artists = await fetch(`${import.meta.env.API_SERVER}/api/artists`)
   .then((response) => response.json())
@@ -10,7 +11,7 @@ const artists = await fetch(`${import.meta.env.API_SERVER}/api/artists`)
 ---
 
 <Layout>
-  <main class="px-gutter">
+  <PageContainer>
     <h1 class="font-bold">Line-Up</h1>
     {
       artists.map((artist) => (
@@ -20,5 +21,5 @@ const artists = await fetch(`${import.meta.env.API_SERVER}/api/artists`)
         </>
       ))
     }
-  </main>
+  </PageContainer>
 </Layout>

@@ -3,6 +3,7 @@ import { marked } from "marked";
 
 import { eventListSchema } from "../api";
 import Layout from "../layouts/Layout.astro";
+import PageContainer from "../components/PageContainer.astro";
 
 const events = await fetch(
   `${import.meta.env.API_SERVER}/api/events?populate=*`
@@ -12,7 +13,7 @@ const events = await fetch(
 ---
 
 <Layout>
-  <main class="px-gutter">
+  <PageContainer>
     <h1 class="font-bold">Schedule</h1>
     {
       events.map((event) => (
@@ -24,5 +25,5 @@ const events = await fetch(
         </>
       ))
     }
-  </main>
+  </PageContainer>
 </Layout>
