@@ -5,7 +5,9 @@ import Layout from "../layouts/Layout.astro";
 import { artistListSchema } from "../api";
 import PageContainer from "../components/PageContainer.astro";
 
-const artists = await fetch(`${import.meta.env.API_SERVER}/api/artists`)
+const artists = await fetch(
+  `${import.meta.env.API_SERVER}/api/artists?populate=*`
+)
   .then((response) => response.json())
   .then((response) => artistListSchema.parse(response.data));
 ---
@@ -17,6 +19,10 @@ const artists = await fetch(`${import.meta.env.API_SERVER}/api/artists`)
       artists.map((artist) => (
         <>
           <h2>{artist.name}</h2>
+          {artist.image?.formats.medium ? (
+            <img src={artist.image.formats.medium.url} />
+          ) : null}
+
           <div set:html={marked.parse(artist.description)} />
         </>
       ))
