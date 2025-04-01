@@ -11,6 +11,7 @@ export function getStaticPaths() {
 import { marked } from "marked";
 import qs from "qs";
 import { DateTime } from "luxon";
+import type { z } from "zod";
 
 import { eventListSchema } from "../../api";
 import Layout from "../../layouts/Layout.astro";
@@ -31,6 +32,24 @@ const events = await fetch(
 )
   .then((response) => response.json())
   .then((response) => eventListSchema.parse(response.data));
+
+const venues = Array.from(
+  events.reduce((accumulator, current) => {
+    accumulator.add(current.venue.name);
+    return accumulator;
+  }, new Set<string>())
+).toSorted();
+
+const eventsByVenue = events.reduce<
+  Record<string, z.infer<typeof eventListSchema>>
+>((accumulator, current) => {
+  return {
+    ...accumulator,
+    [current.venue.name]: accumulator[current.venue.name]
+      ? [...accumulator[current.venue.name], current]
+      : [current],
+  };
+}, {});
 ---
 
 <Layout>
@@ -38,16 +57,46 @@ const events = await fetch(
     <h1 class="font-bold">Schedule</h1>
     <DaySelector day={day} />
     {
-      events.map((event) => (
+      venues.length > 1 ? (
         <>
-          <h2>{event.name}</h2>
-          <h3>{event.artists.map((artist) => artist.name).join(", ")}</h3>
-          <h3>{event.venue.name}</h3>
-          {event.description ? (
-            <div set:html={marked.parse(event.description)} />
-          ) : null}
+          <h2>Jump to venue:</h2>
+          <div class="grid grid-cols-2">
+            {venues.map((venue) => (
+              <div class="text-center">
+                <a href={`#${venue}`}>{venue}</a>
+              </div>
+            ))}
+          </div>
         </>
-      ))
+      ) : null
+    }
+
+    {
+      venues.map((venue) => {
+        return (
+          <>
+            <h2 id={venue}>{venue}</h2>
+            {eventsByVenue[venue].map((event) => (
+              <>
+                <h3>{event.name}</h3>
+                <h4>
+                  {DateTime.fromISO(event.startsAt).toLocaleString(
+                    DateTime.TIME_24_SIMPLE
+                  )}{" "}
+                  -{" "}
+                  {DateTime.fromISO(event.endsAt).toLocaleString(
+                    DateTime.TIME_24_SIMPLE
+                  )}
+                </h4>
+                <h4>{event.artists.map((artist) => artist.name).join(", ")}</h4>
+                {event.description ? (
+                  <div set:html={marked.parse(event.description)} />
+                ) : null}
+              </>
+            ))}
+          </>
+        );
+      })
     }
   </PageContainer>
 </Layout>
