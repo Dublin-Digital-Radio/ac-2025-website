@@ -63,7 +63,9 @@ const eventsByVenue = events.reduce<
           <div class="grid grid-cols-2">
             {venues.map((venue) => (
               <div class="text-center">
-                <a href={`#${venue}`}>{venue}</a>
+                <a href={`#${venue}`} class="underline">
+                  {venue}
+                </a>
               </div>
             ))}
           </div>
