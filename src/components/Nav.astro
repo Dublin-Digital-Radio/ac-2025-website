@@ -22,8 +22,8 @@ function pathnameToRoute(pathname: string) {
     ""
   );
 
-  if (pathnameWithoutBase === "/") {
-    return pathnameWithoutBase;
+  if (pathnameWithoutBase === "" || pathnameWithoutBase === "/") {
+    return "/";
   } else if (pathnameWithoutBase.startsWith("/schedule")) {
     return "/schedule";
   } else {
@@ -50,8 +50,7 @@ function pathnameToRoute(pathname: string) {
               },
             ]}
           >
-            {route.text} -{" "}
-            {Astro.url.pathname.replace(import.meta.env.BASE_URL, "")}
+            {route.text}
           </Link>
         </li>
       ))
