@@ -50,7 +50,8 @@ function pathnameToRoute(pathname: string) {
               },
             ]}
           >
-            {route.text} - {pathnameToRoute(Astro.url.pathname)}
+            {route.text} -{" "}
+            {Astro.url.pathname.replace(import.meta.env.BASE_URL, "")}
           </Link>
         </li>
       ))
