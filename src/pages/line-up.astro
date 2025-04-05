@@ -4,30 +4,40 @@ import { marked } from "marked";
 import Layout from "../layouts/Layout.astro";
 import { artistListSchema } from "../api";
 import PageContainer from "../components/PageContainer.astro";
+import ArtistModal from "../components/ArtistModal.astro";
+import { Button } from 'free-astro-components';
 
 const artists = await fetch(
   `${import.meta.env.API_SERVER}/api/artists?populate=*`
 )
   .then((response) => response.json())
   .then((response) => artistListSchema.parse(response.data));
----
 
+function slugify(str) {
+  return str.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+const artistsWithIds = artists.map((artist) => ({
+  ...artist,
+  modalId: `modal-${artist.id || slugify(artist.name)}`,
+  parsedDescription: marked.parse(artist.description),
+}));
+---
 <Layout>
   <PageContainer>
     <h1 class="font-bold">Line-Up</h1>
-    {
-      artists.map((artist) => (
-        <>
-          <h2>{artist.name}</h2>
-          {artist.image?.formats.medium ? (
-            <img
-              src={`${import.meta.env.API_SERVER}${artist.image.formats.medium.url}`}
-            />
-          ) : null}
 
-          <div set:html={marked.parse(artist.description)} />
-        </>
-      ))
-    }
+    {artistsWithIds.map((artist) => (
+      <div class="mb-4 ">
+        <Button label={artist.name} data-modal-trigger={artist.modalId} class="w-full bg-transparent)" />
+
+        <ArtistModal 
+          modalId={artist.modalId} 
+          name={artist.name} 
+          image={artist.image} 
+          descriptionHtml={artist.parsedDescription} 
+        />
+      </div>
+    ))}
   </PageContainer>
 </Layout>

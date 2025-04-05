@@ -1,0 +1,35 @@
+---
+// components/ArtistModal.astro
+export interface Props {
+  modalId: string;
+  name: string;
+  image?: any;
+  descriptionHtml: string;
+}
+
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'free-astro-components';
+const { modalId, name, image, descriptionHtml } = Astro.props;
+const modalSizes = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', 'full'];
+
+---
+
+<Modal id={modalId} client:load>
+  <div class="p-4">
+    <ModalHeader>
+      <h4 class="text-xl font-semibold">{name}</h4>
+    </ModalHeader>
+    <ModalBody class="max-w-2xl">
+      {image?.formats?.medium && (
+        <img 
+          src={image.formats.medium.url} 
+          alt={name} 
+          class="w-full max-w-md mx-auto rounded shadow" 
+        />
+      )}
+      <div class="prose max-w-none" set:html={descriptionHtml} />
+    </ModalBody>
+    <ModalFooter class="flex justify-end mt-4">
+      <Button label="Close" data-modal-close class="bg-gray-600 text-white px-4 py-2 rounded" />
+    </ModalFooter>
+  </div>
+</Modal>

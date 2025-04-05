@@ -90,7 +90,6 @@ const eventsByVenue = events.reduce<
                     DateTime.TIME_24_SIMPLE
                   )}
                 </h4>
-                <h4>{event.artists.map((artist) => artist.name).join(", ")}</h4>
                 {event.description ? (
                   <div set:html={marked.parse(event.description)} />
                 ) : null}
