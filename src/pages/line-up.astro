@@ -1,6 +1,4 @@
 ---
-import { marked } from "marked";
-
 import Layout from "../layouts/Layout.astro";
 import { artistListSchema } from "../api";
 import PageContainer from "../components/PageContainer.astro";
@@ -17,17 +15,76 @@ const artists = await fetch(
     <h1 class="font-bold">Line-Up</h1>
     {
       artists.map((artist) => (
-        <>
+        <a
+          href="#"
+          class="artist-info-button underline"
+          data-artist-image-url={
+            artist.image?.formats.medium
+              ? `${import.meta.env.API_SERVER}${artist.image.formats.medium.url}`
+              : ""
+          }
+          data-artist-description={artist.description}
+        >
           <h2>{artist.name}</h2>
-          {artist.image?.formats.medium ? (
-            <img
-              src={`${import.meta.env.API_SERVER}${artist.image.formats.medium.url}`}
-            />
-          ) : null}
-
-          <div set:html={marked.parse(artist.description)} />
-        </>
+        </a>
       ))
     }
   </PageContainer>
 </Layout>
+<dialog id="dialog">
+  <form method="dialog">
+    <img id="dialog-image" />
+    <div id="dialog-description"></div>
+  </form>
+</dialog>
+
+<script>
+  import { marked } from "marked";
+
+  const artistInfoButtons = document.querySelectorAll(".artist-info-button");
+  artistInfoButtons.forEach((artistInfoButton) => {
+    if (artistInfoButton instanceof HTMLElement) {
+      artistInfoButton.addEventListener("click", () => {
+        const dialogElement = document.getElementById("dialog");
+        const imageElement = document.getElementById("dialog-image");
+        if (imageElement instanceof HTMLImageElement) {
+          imageElement.src = artistInfoButton.dataset.artistImageUrl ?? "";
+        }
+
+        const descriptionElement =
+          document.getElementById("dialog-description");
+        if (descriptionElement instanceof HTMLDivElement) {
+          if (
+            artistInfoButton.dataset.artistDescription &&
+            typeof artistInfoButton.dataset.artistDescription === "string"
+          ) {
+            descriptionElement.innerHTML = marked.parse(
+              artistInfoButton.dataset.artistDescription,
+              { async: false }
+            );
+          }
+        }
+
+        if (dialogElement && dialogElement instanceof HTMLDialogElement) {
+          dialogElement.showModal();
+          dialogElement.scrollTo(0, 0);
+          dialogElement.addEventListener("click", function (event) {
+            if (event.target === dialogElement) {
+              dialogElement.close();
+            }
+          });
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  :modal {
+    border-radius: 5px;
+  }
+
+  dialog {
+    margin: auto;
+  }
+</style>
