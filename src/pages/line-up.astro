@@ -33,8 +33,10 @@ const artists = await fetch(
 </Layout>
 <dialog id="dialog">
   <form method="dialog">
-    <img id="dialog-image" />
-    <div id="dialog-description"></div>
+    <div class="container">
+      <img id="dialog-image" />
+      <div id="dialog-description" class="text" ></div>
+    </div>
   </form>
 </dialog>
 
@@ -82,9 +84,21 @@ const artists = await fetch(
 <style>
   :modal {
     border-radius: 5px;
+    background-color: white;
   }
 
   dialog {
     margin: auto;
   }
+
+  .text {
+  font-size: 20px;
+  padding-left: 20px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
 </style>
