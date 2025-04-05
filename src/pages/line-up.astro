@@ -34,7 +34,7 @@ const artists = await fetch(
 <dialog id="dialog">
   <form method="dialog">
     <div class="container">
-      <img id="dialog-image" />
+      <img id="dialog-image" class="artist_img"/>
       <div id="dialog-description" class="text" ></div>
     </div>
   </form>
@@ -82,23 +82,57 @@ const artists = await fetch(
 </script>
 
 <style>
-  :modal {
-    border-radius: 5px;
-    background-color: white;
-  }
-
   dialog {
-    margin: auto;
-  }
-
-  .text {
-  font-size: 20px;
-  padding-left: 20px;
+  border-radius: 10px;
+  background-color: white;
+  width: 50%;
+  height: 70%;
+  max-width: 800px;
+  max-height: 90vh;
+  padding: 1rem;
+  overflow: auto;
+  margin: auto;
+  border: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .container {
   display: flex;
-  align-items: center;
-  justify-content: center
+  flex-direction: row;
+  gap: 1rem;
+  height: 100%;
+  overflow: auto;
 }
+
+.artist_img {
+  max-width: 50%;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.text {
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-y: auto;
+  flex: 1;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .artist_img {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .text {
+    font-size: 0.9rem;
+    padding-top: 1rem;
+  }
+}
+
 </style>
