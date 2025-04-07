@@ -21,7 +21,11 @@ export const artistListSchema = z.array(artistSchema);
 
 const venueSchema = z.object({
   name: z.string(),
+  description: z.string().nullish(),
+  googleMapsUrl: z.string().nullish(),
 });
+
+export const venueListSchema = z.array(venueSchema);
 
 export const eventListSchema = z.array(
   z.object({
