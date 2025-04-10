@@ -48,9 +48,10 @@ function pathnameToRoute(pathname: string) {
           <Link
             href={route.href}
             class:list={[
-              "underline",
+              "underline lowercase",
               {
-                "font-bold": pathnameToRoute(Astro.url.pathname) === route.href,
+                "font-bold decoration-double decoration-[#E5AD35] underline-offset-4":
+                  pathnameToRoute(Astro.url.pathname) === route.href,
               },
             ]}
           >
