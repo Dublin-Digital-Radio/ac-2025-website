@@ -4,15 +4,14 @@
   @font-face {
     font-family: Alte Haas Grotesk;
     font-weight: normal;
-    src: url(/ac-2025-website-prototype-astro/fonts/AlteHaasGroteskRegular.ttf)
+    src: url(/ac-2025-website/fonts/AlteHaasGroteskRegular.ttf)
       format("truetype");
   }
 
   @font-face {
     font-family: Alte Haas Grotesk;
     font-weight: bold;
-    src: url(/ac-2025-website-prototype-astro/fonts/AlteHaasGroteskBold.ttf)
-      format("truetype");
+    src: url(/ac-2025-website/fonts/AlteHaasGroteskBold.ttf) format("truetype");
   }
 
   body {

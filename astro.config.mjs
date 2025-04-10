@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 
 import tailwindcss from "@tailwindcss/vite";
 
-const base = "ac-2025-website-prototype-astro";
+const base = "ac-2025-website";
 
 // https://astro.build/config
 export default defineConfig({
