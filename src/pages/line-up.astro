@@ -70,7 +70,8 @@ const artists = await fetch(
   const artistInfoButtons = document.querySelectorAll(".artist-info-button");
   artistInfoButtons.forEach((artistInfoButton) => {
     if (artistInfoButton instanceof HTMLElement) {
-      artistInfoButton.addEventListener("click", () => {
+      artistInfoButton.addEventListener("click", (event) => {
+        event.preventDefault();
         const dialogElement = document.getElementById("dialog");
         const imageElement = document.getElementById("dialog-image");
         if (imageElement instanceof HTMLImageElement) {
