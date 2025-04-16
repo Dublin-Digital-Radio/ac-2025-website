@@ -35,8 +35,10 @@ const artists = await fetch(
           ]}
         >
           <a
-            href="#"
+            id={artist.name}
+            href={`#${artist.name}`}
             class="artist-info-button"
+            data-artist-name={encodeURIComponent(artist.name)}
             data-artist-image-url={
               artist.image?.formats.medium
                 ? `${import.meta.env.API_SERVER}${artist.image.formats.medium.url}`
@@ -67,43 +69,66 @@ const artists = await fetch(
 <script>
   import { marked } from "marked";
 
+  function showArtistInfoModal(name: string) {
+    const artistInfoButton = document.querySelectorAll(
+      `[data-artist-name='${name}']`
+    )[0];
+
+    if (artistInfoButton && artistInfoButton instanceof HTMLElement) {
+      window.location.hash = name;
+      const dialogElement = document.getElementById("dialog");
+      const imageElement = document.getElementById("dialog-image");
+      if (imageElement instanceof HTMLImageElement) {
+        imageElement.src = artistInfoButton.dataset.artistImageUrl ?? "";
+      }
+
+      const descriptionElement = document.getElementById("dialog-description");
+      if (descriptionElement instanceof HTMLDivElement) {
+        if (
+          artistInfoButton.dataset.artistDescription &&
+          typeof artistInfoButton.dataset.artistDescription === "string"
+        ) {
+          descriptionElement.innerHTML = marked.parse(
+            artistInfoButton.dataset.artistDescription,
+            { async: false }
+          );
+        }
+      }
+
+      if (dialogElement && dialogElement instanceof HTMLDialogElement) {
+        dialogElement.showModal();
+        dialogElement.scrollTo(0, 0);
+        dialogElement.addEventListener("click", function (event) {
+          if (event.target === dialogElement) {
+            dialogElement.close();
+            window.history.replaceState(
+              "",
+              "",
+              window.location.pathname + window.location.search
+            );
+          }
+        });
+      }
+    }
+  }
+
   const artistInfoButtons = document.querySelectorAll(".artist-info-button");
   artistInfoButtons.forEach((artistInfoButton) => {
     if (artistInfoButton instanceof HTMLElement) {
       artistInfoButton.addEventListener("click", (event) => {
         event.preventDefault();
-        const dialogElement = document.getElementById("dialog");
-        const imageElement = document.getElementById("dialog-image");
-        if (imageElement instanceof HTMLImageElement) {
-          imageElement.src = artistInfoButton.dataset.artistImageUrl ?? "";
-        }
 
-        const descriptionElement =
-          document.getElementById("dialog-description");
-        if (descriptionElement instanceof HTMLDivElement) {
-          if (
-            artistInfoButton.dataset.artistDescription &&
-            typeof artistInfoButton.dataset.artistDescription === "string"
-          ) {
-            descriptionElement.innerHTML = marked.parse(
-              artistInfoButton.dataset.artistDescription,
-              { async: false }
-            );
-          }
-        }
-
-        if (dialogElement && dialogElement instanceof HTMLDialogElement) {
-          dialogElement.showModal();
-          dialogElement.scrollTo(0, 0);
-          dialogElement.addEventListener("click", function (event) {
-            if (event.target === dialogElement) {
-              dialogElement.close();
-            }
-          });
+        if (artistInfoButton.dataset.artistName) {
+          showArtistInfoModal(artistInfoButton.dataset.artistName);
         }
       });
     }
   });
+
+  const nameFromRoute = window.location.hash.substring(1);
+  if (nameFromRoute) {
+    showArtistInfoModal(nameFromRoute);
+  }
 </script>
 
 <style>

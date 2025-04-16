@@ -17,6 +17,7 @@ import { eventListSchema } from "../../api";
 import Layout from "../../layouts/Layout.astro";
 import PageContainer from "../../components/PageContainer.astro";
 import DaySelector from "../../components/DaySelector.astro";
+import Link from "../../components/Link.astro";
 
 const { day } = Astro.params;
 
@@ -90,7 +91,17 @@ const eventsByVenue = events.reduce<
                     DateTime.TIME_24_SIMPLE
                   )}
                 </h4>
-                <h4>{event.artists.map((artist) => artist.name).join(", ")}</h4>
+                <div>
+                  {event.artists.map((artist) => (
+                    <Link
+                      href={`/line-up#${artist.name}`}
+                      class="underline pe-2"
+                      target="_blank"
+                    >
+                      {artist.name}
+                    </Link>
+                  ))}
+                </div>
                 {event.description ? (
                   <div set:html={marked.parse(event.description)} />
                 ) : null}
