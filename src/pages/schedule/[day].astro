@@ -55,32 +55,37 @@ const eventsByVenue = events.reduce<
 
 <Layout>
   <PageContainer>
-    <h1 class="font-bold">Schedule</h1>
-    <DaySelector day={day} />
-    {
-      venues.length > 1 ? (
-        <>
-          <h2>Jump to venue:</h2>
-          <div class="grid grid-cols-2">
-            {venues.map((venue) => (
-              <div class="text-center">
-                <a href={`#${venue}`} class="underline">
-                  {venue}
-                </a>
-              </div>
-            ))}
-          </div>
-        </>
-      ) : null
-    }
+    <div class="mb-2">
+      <DaySelector day={day} />
+    </div>
+    <div class="mb-4">
+      {
+        venues.length > 1 ? (
+          <>
+            <p class="font-bold">Jump to venue:</p>
+            <div class="grid grid-cols-2">
+              {venues.map((venue) => (
+                <div>
+                  <a href={`#${venue}`} class="underline">
+                    {venue}
+                  </a>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : null
+      }
+    </div>
 
     {
       venues.map((venue) => {
         return (
-          <>
-            <h2 id={venue}>{venue}</h2>
+          <section class="mb-4">
+            <h2 id={venue} class="mb-2">
+              {venue}
+            </h2>
             {eventsByVenue[venue].map((event) => (
-              <>
+              <div class="mb-2">
                 <h3>{event.name}</h3>
                 <h4>
                   {DateTime.fromISO(event.startsAt).toLocaleString(
@@ -106,9 +111,9 @@ const eventsByVenue = events.reduce<
                 {event.description ? (
                   <div set:html={marked.parse(event.description)} />
                 ) : null}
-              </>
+              </div>
             ))}
-          </>
+          </section>
         );
       })
     }
