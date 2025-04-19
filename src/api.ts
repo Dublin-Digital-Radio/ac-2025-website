@@ -17,6 +17,8 @@ const artistSchema = z.object({
     .nullish(),
 });
 
+export type Artist = z.infer<typeof artistSchema>;
+
 export const artistListSchema = z.array(artistSchema);
 
 const venueSchema = z.object({

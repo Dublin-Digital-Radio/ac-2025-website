@@ -1,0 +1,22 @@
+---
+import type { Artist } from "../../api";
+
+interface Props {
+  artist: Artist;
+}
+
+const { artist } = Astro.props;
+---
+
+<a
+  id={artist.name}
+  href={`#${artist.name}`}
+  class="artist-info-button"
+  data-artist-name={artist.name}
+  data-artist-image-url={artist.image?.formats.medium
+    ? `${import.meta.env.API_SERVER}${artist.image.formats.medium.url}`
+    : ""}
+  data-artist-description={artist.description}
+>
+  <slot />
+</a>

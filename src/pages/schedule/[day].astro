@@ -17,13 +17,23 @@ import { eventListSchema } from "../../api";
 import Layout from "../../layouts/Layout.astro";
 import PageContainer from "../../components/PageContainer.astro";
 import DaySelector from "../../components/DaySelector.astro";
-import Link from "../../components/Link.astro";
+import ArtistInfoModal from "../../components/artist-info-modal/ArtistInfoModal.astro";
+import ArtistInfoModalButton from "../../components/artist-info-modal/ArtistInfoModalButton.astro";
+
+import "../../components/artist-info-modal/artist-info-modal.css";
 
 const { day } = Astro.params;
 
 const events = await fetch(
   `${import.meta.env.API_SERVER}/api/events?${qs.stringify({
-    populate: "*",
+    populate: {
+      artists: {
+        populate: "*",
+      },
+      venue: {
+        populate: "*",
+      },
+    },
     filters: {
       scheduleDay: {
         $eq: day,
@@ -99,13 +109,9 @@ const eventsByVenue = events.reduce<
                 <div>
                   Artist(s):{" "}
                   {event.artists.map((artist) => (
-                    <Link
-                      href={`/line-up#${artist.name}`}
-                      class="underline pe-2"
-                      target="_blank"
-                    >
+                    <ArtistInfoModalButton artist={artist}>
                       {artist.name}
-                    </Link>
+                    </ArtistInfoModalButton>
                   ))}
                 </div>
                 {event.description ? (
@@ -119,3 +125,25 @@ const eventsByVenue = events.reduce<
     }
   </PageContainer>
 </Layout>
+<ArtistInfoModal />
+
+<script>
+  import { showArtistInfoModal } from "../../components/artist-info-modal/artist-info-modal-controller";
+
+  const artistInfoButtons = document.querySelectorAll(".artist-info-button");
+  artistInfoButtons.forEach((artistInfoButton) => {
+    if (artistInfoButton instanceof HTMLElement) {
+      artistInfoButton.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        if (artistInfoButton.dataset.artistName) {
+          showArtistInfoModal({
+            name: artistInfoButton.dataset.artistName,
+            imageUrl: artistInfoButton.dataset.artistImageUrl,
+            markdownDescription: artistInfoButton.dataset.artistDescription,
+          });
+        }
+      });
+    }
+  });
+</script>
