@@ -27,22 +27,10 @@ const artists = await fetch(
   <PageContainer>
     {
       artists.map((artist) => (
-        <div
-          style={{
-            "--image-url": `url(${import.meta.env.API_SERVER}${artist.image?.formats.medium.url})`,
-          }}
-          class:list={[
-            "py-8 bg-center",
-            {
-              [`bg-[image:var(--image-url)]`]: Boolean(artist.image),
-            },
-          ]}
-        >
+        <div>
           <ArtistInfoModalButton artist={artist}>
-            <h2 class="pb-2">
-              <span class="p-2 underline underline-offset-4 bg-[#009ee1]">
-                {artist.name}
-              </span>
+            <h2 class="pb-2 underline underline-offset-8">
+              <span class="p-2  bg-[#009ee1]">{artist.name}</span>
             </h2>
           </ArtistInfoModalButton>
         </div>
