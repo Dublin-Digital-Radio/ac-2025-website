@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const artistSchema = z.object({
+  id: z.number().transform((val) => val.toString()),
   name: z.string(),
   description: z.string(),
   image: z
@@ -30,17 +31,19 @@ const venueSchema = z.object({
 
 export const venueListSchema = z.array(venueSchema);
 
-export const eventListSchema = z.array(
-  z.object({
-    id: z.number(),
-    name: z.string(),
-    artists: artistListSchema,
-    venue: venueSchema,
-    description: z.string().nullable(),
-    startsAt: z.string(),
-    endsAt: z.string(),
-  })
-);
+const eventSchema = z.object({
+  id: z.number().transform((val) => val.toString()),
+  name: z.string(),
+  artists: artistListSchema,
+  venue: venueSchema,
+  description: z.string().nullable(),
+  startsAt: z.string(),
+  endsAt: z.string(),
+});
+
+export type Event = z.infer<typeof eventSchema>;
+
+export const eventListSchema = z.array(eventSchema);
 
 export const radioCultScheduleSchema = z.object({
   schedules: z.array(

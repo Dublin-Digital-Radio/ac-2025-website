@@ -1,0 +1,50 @@
+---
+import { DateTime } from "luxon";
+
+import type { Event } from "../api";
+import ArtistInfoModalButton from "./artist-info-modal/ArtistInfoModalButton.astro";
+
+interface Props {
+  event: Omit<Event, "venue">;
+}
+
+const { event } = Astro.props;
+---
+
+<div class="mb-2">
+  <h3>{event.name}</h3>
+  <h4>
+    {DateTime.fromISO(event.startsAt).toLocaleString(DateTime.TIME_24_SIMPLE)}{
+      " "
+    }
+    -{" "}
+    {DateTime.fromISO(event.endsAt).toLocaleString(DateTime.TIME_24_SIMPLE)}
+  </h4>
+  {
+    event.description ? (
+      <div>
+        Contributors ~{" "}
+        {event.artists.map((artist) => (
+          <ArtistInfoModalButton artist={artist} class="underline">
+            {artist.name}
+          </ArtistInfoModalButton>
+        ))}
+      </div>
+    ) : null
+  }
+
+  <button class="view-details-button underline" data-event-id={event.id}>
+    Info
+  </button>
+  <div
+    class="event-description-container"
+    data-event-id={event.id}
+    data-event-description={event.description}
+    data-artist-name={event.artists[0].name}
+    data-artist-image-url={event.artists[0].image?.formats.medium
+      ? `${import.meta.env.API_SERVER}${event.artists[0].image.formats.medium.url}`
+      : ""}
+    data-artist-description={event.artists[0].description}
+  >
+  </div>
+</div>

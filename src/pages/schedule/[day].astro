@@ -8,7 +8,6 @@ export function getStaticPaths() {
   ];
 }
 
-import { marked } from "marked";
 import qs from "qs";
 import { DateTime } from "luxon";
 import type { z } from "zod";
@@ -25,6 +24,7 @@ import ArtistInfoModal from "../../components/artist-info-modal/ArtistInfoModal.
 import ArtistInfoModalButton from "../../components/artist-info-modal/ArtistInfoModalButton.astro";
 
 import "../../components/artist-info-modal/artist-info-modal.css";
+import EventInfo from "../../components/EventInfo.astro";
 
 const { day } = Astro.params;
 
@@ -159,84 +159,41 @@ const onlineBroadcastArtists = await fetch(
               {venue}
             </h2>
             {eventsByVenue[venue].map((event) => (
-              <div class="mb-2">
-                <h3>{event.name}</h3>
-                <h4>
-                  {DateTime.fromISO(event.startsAt).toLocaleString(
-                    DateTime.TIME_24_SIMPLE
-                  )}{" "}
-                  -{" "}
-                  {DateTime.fromISO(event.endsAt).toLocaleString(
-                    DateTime.TIME_24_SIMPLE
-                  )}
-                </h4>
-                {event.description ? (
-                  <div>
-                    Contributors ~{" "}
-                    {event.artists.map((artist) => (
-                      <ArtistInfoModalButton artist={artist} class="underline">
-                        {artist.name}
-                      </ArtistInfoModalButton>
-                    ))}
-                  </div>
-                ) : null}
-
-                <button
-                  class="view-details-button underline"
-                  data-event-id={event.id}
-                >
-                  Info
-                </button>
-                {/* {event.description ? (
-                  <div set:html={marked.parse(event.description)} />
-                ) : null} */}
-                <div
-                  class="event-description-container"
-                  data-event-id={event.id}
-                  data-event-description={event.description}
-                  data-artist-name={event.artists[0].name}
-                  data-artist-image-url={
-                    event.artists[0].image?.formats.medium
-                      ? `${import.meta.env.API_SERVER}${event.artists[0].image.formats.medium.url}`
-                      : ""
-                  }
-                  data-artist-description={event.artists[0].description}
-                />
-              </div>
+              <EventInfo event={event} />
             ))}
           </section>
         );
       })
     }
-    <section class="mb-4">
-      <h2 id="online-broadcasting" class="mb-2">Online Broadcasting</h2>
-      <ul>
-        {
-          onlineBroadcastShows.map((show) => {
+    {
+      onlineBroadcastArtists.length > 0 ? (
+        <section class="mb-4">
+          <h2 id="online-broadcasting" class="mb-2">
+            Online Broadcasting
+          </h2>
+          {onlineBroadcastShows.map((show) => {
             const matchedArtist = onlineBroadcastArtists.find(
               (artist) => artist.name === show.title
             );
+            if (!matchedArtist) {
+              return null;
+            }
             return (
-              <li>
-                {show.title}{" "}
-                {DateTime.fromISO(show.start).toLocaleString(
-                  DateTime.TIME_24_SIMPLE
-                )}{" "}
-                -{" "}
-                {DateTime.fromISO(show.end).toLocaleString(
-                  DateTime.TIME_24_SIMPLE
-                )}
-                {matchedArtist && matchedArtist.image?.formats.medium.url ? (
-                  <img
-                    src={`${import.meta.env.API_SERVER}${matchedArtist.image.formats.medium.url}`}
-                  />
-                ) : null}
-              </li>
+              <EventInfo
+                event={{
+                  id: `online-broadcasting-${matchedArtist.id}`,
+                  name: matchedArtist.name,
+                  description: null, // Force to use artist description
+                  artists: [matchedArtist],
+                  startsAt: show.start,
+                  endsAt: show.end,
+                }}
+              />
             );
-          })
-        }
-      </ul>
-    </section>
+          })}
+        </section>
+      ) : null
+    }
   </PageContainer>
 </Layout>
 <ArtistInfoModal />
