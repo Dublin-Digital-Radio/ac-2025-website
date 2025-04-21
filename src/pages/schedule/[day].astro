@@ -16,6 +16,7 @@ import {
   artistListSchema,
   eventListSchema,
   radioCultScheduleSchema,
+  type Venue,
 } from "../../api";
 import Layout from "../../layouts/Layout.astro";
 import PageContainer from "../../components/PageContainer.astro";
@@ -26,6 +27,8 @@ import "../../components/artist-info-modal/artist-info-modal.css";
 import EventInfo from "../../components/EventInfo.astro";
 
 const { day } = Astro.params;
+
+const onlineBroadcastingVenueName = "Online Broadcasting";
 
 const events = await fetch(
   `${import.meta.env.API_SERVER}/api/events?${qs.stringify({
@@ -48,11 +51,25 @@ const events = await fetch(
   .then((response) => eventListSchema.parse(response.data));
 
 const venues = Array.from(
-  events.reduce((accumulator, current) => {
-    accumulator.add(current.venue.name);
-    return accumulator;
-  }, new Set<string>())
-).toSorted();
+  events.reduce<Venue[]>((accumulator, current) => {
+    if (accumulator.find((venue) => venue.name === current.venue.name)) {
+      return accumulator;
+    } else {
+      return [...accumulator, current.venue];
+    }
+  }, [])
+)
+  .toSorted((venueA, venueB) => {
+    if (venueA.order < venueB.order) {
+      return -1;
+    } else {
+      return 1;
+    }
+  })
+  .concat({
+    name: onlineBroadcastingVenueName,
+    order: 999,
+  });
 
 const eventsByVenue = events.reduce<
   Record<string, z.infer<typeof eventListSchema>>
@@ -139,8 +156,8 @@ const onlineBroadcastArtists = await fetch(
             <div class="grid grid-cols-2">
               {venues.map((venue) => (
                 <div>
-                  <a href={`#${venue}`} class="underline">
-                    {venue}
+                  <a href={`#${venue.name}`} class="underline">
+                    {venue.name}
                   </a>
                 </div>
               ))}
@@ -151,54 +168,49 @@ const onlineBroadcastArtists = await fetch(
     </div>
 
     {
-      venues.map((venue) => {
-        return (
-          <section class="mb-4">
-            <h2 id={venue} class="mb-2">
-              {venue}
-            </h2>
-            {eventsByVenue[venue].map((event) => (
-              <EventInfo event={event} />
-            ))}
-          </section>
-        );
-      })
-    }
-    {
-      onlineBroadcastArtists.length > 0 ? (
+      venues.map((venue) => (
         <section class="mb-4">
-          <h2 id="online-broadcasting" class="mb-2">
-            Online Broadcasting
+          <h2 id={venue.name} class="mb-2">
+            {venue.name}
           </h2>
-          {onlineBroadcastShows.map((show) => {
-            const matchedArtist = onlineBroadcastArtists.find(
-              (artist) => artist.name === show.title
-            );
-            if (!matchedArtist) {
-              return null;
-            }
-            return (
-              <EventInfo
-                event={{
-                  id: `online-broadcasting-${matchedArtist.id}`,
-                  name: matchedArtist.name,
-                  description: null, // Force to use artist description
-                  artists: [matchedArtist],
-                  startsAt: show.start,
-                  endsAt: show.end,
-                }}
-              />
-            );
-          })}
+          {venue.name !== onlineBroadcastingVenueName ? (
+            <>
+              {eventsByVenue[venue.name].map((event) => (
+                <EventInfo event={event} />
+              ))}
+            </>
+          ) : onlineBroadcastArtists.length > 0 ? (
+            <>
+              {onlineBroadcastShows.map((show) => {
+                const matchedArtist = onlineBroadcastArtists.find(
+                  (artist) => artist.name === show.title
+                );
+                if (!matchedArtist) {
+                  return null;
+                }
+                return (
+                  <EventInfo
+                    event={{
+                      id: `online-broadcasting-${matchedArtist.id}`,
+                      name: matchedArtist.name,
+                      description: null, // Force to use artist description
+                      artists: [matchedArtist],
+                      startsAt: show.start,
+                      endsAt: show.end,
+                    }}
+                  />
+                );
+              })}
+            </>
+          ) : null}
         </section>
-      ) : null
+      ))
     }
   </PageContainer>
 </Layout>
 <ArtistInfoModal />
 
 <script>
-  import { marked } from "marked";
   import { showArtistInfoModal } from "../../components/artist-info-modal/artist-info-modal-controller";
 
   const artistInfoButtons = document.querySelectorAll(".artist-info-button");

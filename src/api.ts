@@ -29,6 +29,8 @@ const venueSchema = z.object({
   googleMapsUrl: z.string().nullish(),
 });
 
+export type Venue = z.infer<typeof venueSchema>;
+
 export const venueListSchema = z.array(venueSchema);
 
 const eventSchema = z.object({
