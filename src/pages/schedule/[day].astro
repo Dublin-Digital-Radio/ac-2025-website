@@ -50,27 +50,6 @@ const events = await fetch(
   .then((response) => response.json())
   .then((response) => eventListSchema.parse(response.data));
 
-const venues = Array.from(
-  events.reduce<Venue[]>((accumulator, current) => {
-    if (accumulator.find((venue) => venue.name === current.venue.name)) {
-      return accumulator;
-    } else {
-      return [...accumulator, current.venue];
-    }
-  }, [])
-)
-  .toSorted((venueA, venueB) => {
-    if (venueA.order < venueB.order) {
-      return -1;
-    } else {
-      return 1;
-    }
-  })
-  .concat({
-    name: onlineBroadcastingVenueName,
-    order: 999,
-  });
-
 const eventsByVenue = events.reduce<
   Record<string, z.infer<typeof eventListSchema>>
 >((accumulator, current) => {
@@ -141,6 +120,31 @@ const onlineBroadcastArtists = await fetch(
 )
   .then((response) => response.json())
   .then((response) => artistListSchema.parse(response.data));
+
+const venues = Array.from(
+  events.reduce<Venue[]>((accumulator, current) => {
+    if (accumulator.find((venue) => venue.name === current.venue.name)) {
+      return accumulator;
+    } else {
+      return [...accumulator, current.venue];
+    }
+  }, [])
+)
+  .toSorted((venueA, venueB) => {
+    if (venueA.order < venueB.order) {
+      return -1;
+    } else {
+      return 1;
+    }
+  })
+  .concat(
+    onlineBroadcastArtists.length > 0
+      ? {
+          name: onlineBroadcastingVenueName,
+          order: 999,
+        }
+      : []
+  );
 ---
 
 <Layout>
