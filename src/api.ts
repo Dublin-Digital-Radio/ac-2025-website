@@ -22,6 +22,7 @@ export type Artist = z.infer<typeof artistSchema>;
 export const artistListSchema = z.array(artistSchema);
 
 const venueSchema = z.object({
+  order: z.number(),
   name: z.string(),
   description: z.string().nullish(),
   googleMapsUrl: z.string().nullish(),
