@@ -109,7 +109,7 @@ const eventsByVenue = events.reduce<
                 <div>
                   Artist(s):{" "}
                   {event.artists.map((artist) => (
-                    <ArtistInfoModalButton artist={artist}>
+                    <ArtistInfoModalButton artist={artist} class="underline">
                       {artist.name}
                     </ArtistInfoModalButton>
                   ))}
