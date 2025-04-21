@@ -48,9 +48,9 @@ function pathnameToRoute(pathname: string) {
           <Link
             href={route.href}
             class:list={[
-              "underline lowercase",
+              "lowercase",
               {
-                "font-bold decoration-double decoration-[#E5AD35] underline-offset-4":
+                "font-bold decoration-double decoration-[#E5AD35] underline underline-offset-4":
                   pathnameToRoute(Astro.url.pathname) === route.href,
               },
             ]}
@@ -61,11 +61,7 @@ function pathnameToRoute(pathname: string) {
       ))
     }
     <li>
-      <a
-        href="https://ra.co/events/2092497"
-        class="underline lowercase"
-        target="_blank"
-      >
+      <a href="https://ra.co/events/2092497" class="lowercase" target="_blank">
         Tickets
       </a>
     </li>
