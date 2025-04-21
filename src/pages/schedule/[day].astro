@@ -21,7 +21,6 @@ import Layout from "../../layouts/Layout.astro";
 import PageContainer from "../../components/PageContainer.astro";
 import DaySelector from "../../components/DaySelector.astro";
 import ArtistInfoModal from "../../components/artist-info-modal/ArtistInfoModal.astro";
-import ArtistInfoModalButton from "../../components/artist-info-modal/ArtistInfoModalButton.astro";
 
 import "../../components/artist-info-modal/artist-info-modal.css";
 import EventInfo from "../../components/EventInfo.astro";
@@ -226,26 +225,21 @@ const onlineBroadcastArtists = await fetch(
         event.preventDefault();
 
         if (viewDetailsButton.dataset.eventId) {
-          document
-            .querySelectorAll(`.event-description-container`)
-            .forEach((container) => {
-              container.innerHTML = "";
-            });
-          const container = document.querySelectorAll(
+          const targetContainer = document.querySelectorAll(
             `.event-description-container[data-event-id='${viewDetailsButton.dataset.eventId}']`
           )[0];
 
-          if (container.dataset.eventDescription) {
-            container.innerHTML = marked.parse(
-              container.dataset.eventDescription
-            );
-          } else {
-            showArtistInfoModal({
-              name: container.dataset.artistName,
-              imageUrl: container.dataset.artistImageUrl,
-              markdownDescription: container.dataset.artistDescription,
-            });
+          if (targetContainer instanceof HTMLDivElement) {
+            targetContainer.classList.toggle("hidden");
           }
+
+          document
+            .querySelectorAll(`.event-description-container`)
+            .forEach((container) => {
+              if (container !== targetContainer) {
+                container.classList.add("hidden");
+              }
+            });
         }
       });
     }

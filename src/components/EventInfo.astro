@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 
 import type { Event } from "../api";
 import ArtistInfoModalButton from "./artist-info-modal/ArtistInfoModalButton.astro";
+import { marked } from "marked";
 
 interface Props {
   event: Omit<Event, "venue">;
@@ -33,18 +34,22 @@ const { event } = Astro.props;
     ) : null
   }
 
-  <button class="view-details-button underline" data-event-id={event.id}>
-    Info
-  </button>
-  <div
-    class="event-description-container"
-    data-event-id={event.id}
-    data-event-description={event.description}
-    data-artist-name={event.artists[0].name}
-    data-artist-image-url={event.artists[0].image?.formats.medium
-      ? `${import.meta.env.API_SERVER}${event.artists[0].image.formats.medium.url}`
-      : ""}
-    data-artist-description={event.artists[0].description}
-  >
-  </div>
+  {
+    event.description ? (
+      <>
+        <button class="view-details-button underline" data-event-id={event.id}>
+          Info
+        </button>
+        <div
+          class="event-description-container hidden"
+          data-event-id={event.id}
+          set:html={marked.parse(event.description)}
+        />
+      </>
+    ) : (
+      <ArtistInfoModalButton artist={event.artists[0]} class="underline">
+        Info
+      </ArtistInfoModalButton>
+    )
+  }
 </div>
