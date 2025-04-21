@@ -7,6 +7,11 @@ const routes = [
     text: "Home",
   },
   {
+    href: "https://ra.co/events/2092497",
+    text: "Tickets",
+    target: "_blank",
+  },
+  {
     href: "/line-up",
     text: "Line-Up",
   },
@@ -54,16 +59,12 @@ function pathnameToRoute(pathname: string) {
                   pathnameToRoute(Astro.url.pathname) === route.href,
               },
             ]}
+            target={route.target}
           >
             {route.text}
           </Link>
         </li>
       ))
     }
-    <li>
-      <a href="https://ra.co/events/2092497" class="lowercase" target="_blank">
-        Tickets
-      </a>
-    </li>
   </ul>
 </nav>
