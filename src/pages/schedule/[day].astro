@@ -13,7 +13,11 @@ import qs from "qs";
 import { DateTime } from "luxon";
 import type { z } from "zod";
 
-import { eventListSchema } from "../../api";
+import {
+  artistListSchema,
+  eventListSchema,
+  radioCultScheduleSchema,
+} from "../../api";
 import Layout from "../../layouts/Layout.astro";
 import PageContainer from "../../components/PageContainer.astro";
 import DaySelector from "../../components/DaySelector.astro";
@@ -61,6 +65,66 @@ const eventsByVenue = events.reduce<
       : [current],
   };
 }, {});
+
+let startDateTimestamp;
+let endDateTimestamp;
+switch (day) {
+  case "may-1":
+    startDateTimestamp = DateTime.fromISO("2025-05-01").startOf("day").toUTC();
+    endDateTimestamp = DateTime.fromISO("2025-05-01").endOf("day").toUTC();
+    break;
+  case "may-2":
+    startDateTimestamp = DateTime.fromISO("2025-05-02").startOf("day").toUTC();
+    endDateTimestamp = DateTime.fromISO("2025-05-02").endOf("day").toUTC();
+    break;
+  case "may-3":
+    startDateTimestamp = DateTime.fromISO("2025-05-03").startOf("day").toUTC();
+    endDateTimestamp = DateTime.fromISO("2025-05-03").endOf("day").toUTC();
+    break;
+  case "may-4":
+    startDateTimestamp = DateTime.fromISO("2025-05-04").startOf("day").toUTC();
+    endDateTimestamp = DateTime.fromISO("2025-05-04").endOf("day").toUTC();
+    break;
+  default:
+    startDateTimestamp = undefined;
+    endDateTimestamp = undefined;
+}
+
+const onlineBroadcastShows = await fetch(
+  `https://api.radiocult.fm/api/station/dublin-digital-radio/schedule?startDate=${startDateTimestamp}&endDate=${endDateTimestamp}`
+)
+  .then((response) => response.json())
+  .then((response) => radioCultScheduleSchema.parse(response))
+  .then((response) =>
+    response.schedules
+      .filter((show) => {
+        return show.title.includes("Alternating Current");
+      })
+      .map((show) => ({
+        ...show,
+        title: show.title.replace(" ~ Alternating Current", ""),
+      }))
+      .toSorted((showA, showB) => {
+        if (showA.start < showB.start) {
+          return -1;
+        } else {
+          return 1;
+        }
+      })
+  );
+
+const onlineBroadcastArtists = await fetch(
+  `${import.meta.env.API_SERVER}/api/artists?${qs.stringify({
+    populate: "*",
+    filters: {
+      name: {
+        $in: onlineBroadcastShows.map((show) => show.title),
+      },
+    },
+  })}`
+)
+  .then((response) => response.json())
+  .then((response) => artistListSchema.parse(response.data));
 ---
 
 <Layout>
@@ -144,6 +208,35 @@ const eventsByVenue = events.reduce<
         );
       })
     }
+    <section class="mb-4">
+      <h2 id="online-broadcasting" class="mb-2">Online Broadcasting</h2>
+      <ul>
+        {
+          onlineBroadcastShows.map((show) => {
+            const matchedArtist = onlineBroadcastArtists.find(
+              (artist) => artist.name === show.title
+            );
+            return (
+              <li>
+                {show.title}{" "}
+                {DateTime.fromISO(show.start).toLocaleString(
+                  DateTime.TIME_24_SIMPLE
+                )}{" "}
+                -{" "}
+                {DateTime.fromISO(show.end).toLocaleString(
+                  DateTime.TIME_24_SIMPLE
+                )}
+                {matchedArtist && matchedArtist.image?.formats.medium.url ? (
+                  <img
+                    src={`${import.meta.env.API_SERVER}${matchedArtist.image.formats.medium.url}`}
+                  />
+                ) : null}
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
   </PageContainer>
 </Layout>
 <ArtistInfoModal />

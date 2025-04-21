@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const artistSchema = z.object({
+export const artistSchema = z.object({
   name: z.string(),
   description: z.string(),
   image: z
@@ -41,3 +41,13 @@ export const eventListSchema = z.array(
     endsAt: z.string(),
   })
 );
+
+export const radioCultScheduleSchema = z.object({
+  schedules: z.array(
+    z.object({
+      title: z.string(),
+      start: z.string(),
+      end: z.string(),
+    })
+  ),
+});
