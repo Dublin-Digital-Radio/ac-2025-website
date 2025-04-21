@@ -31,6 +31,7 @@ export const venueListSchema = z.array(venueSchema);
 
 export const eventListSchema = z.array(
   z.object({
+    id: z.number(),
     name: z.string(),
     artists: artistListSchema,
     venue: venueSchema,

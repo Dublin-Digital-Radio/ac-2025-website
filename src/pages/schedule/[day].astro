@@ -72,7 +72,7 @@ const eventsByVenue = events.reduce<
       {
         venues.length > 1 ? (
           <>
-            <p class="font-bold">Jump to venue:</p>
+            <p class="font-bold text-center">~ Jump to venue ~</p>
             <div class="grid grid-cols-2">
               {venues.map((venue) => (
                 <div>
@@ -106,17 +106,38 @@ const eventsByVenue = events.reduce<
                     DateTime.TIME_24_SIMPLE
                   )}
                 </h4>
-                <div>
-                  Artist(s):{" "}
-                  {event.artists.map((artist) => (
-                    <ArtistInfoModalButton artist={artist} class="underline">
-                      {artist.name}
-                    </ArtistInfoModalButton>
-                  ))}
-                </div>
                 {event.description ? (
-                  <div set:html={marked.parse(event.description)} />
+                  <div>
+                    Contributors ~{" "}
+                    {event.artists.map((artist) => (
+                      <ArtistInfoModalButton artist={artist} class="underline">
+                        {artist.name}
+                      </ArtistInfoModalButton>
+                    ))}
+                  </div>
                 ) : null}
+
+                <button
+                  class="view-details-button underline"
+                  data-event-id={event.id}
+                >
+                  Info
+                </button>
+                {/* {event.description ? (
+                  <div set:html={marked.parse(event.description)} />
+                ) : null} */}
+                <div
+                  class="event-description-container"
+                  data-event-id={event.id}
+                  data-event-description={event.description}
+                  data-artist-name={event.artists[0].name}
+                  data-artist-image-url={
+                    event.artists[0].image?.formats.medium
+                      ? `${import.meta.env.API_SERVER}${event.artists[0].image.formats.medium.url}`
+                      : ""
+                  }
+                  data-artist-description={event.artists[0].description}
+                />
               </div>
             ))}
           </section>
@@ -128,6 +149,7 @@ const eventsByVenue = events.reduce<
 <ArtistInfoModal />
 
 <script>
+  import { marked } from "marked";
   import { showArtistInfoModal } from "../../components/artist-info-modal/artist-info-modal-controller";
 
   const artistInfoButtons = document.querySelectorAll(".artist-info-button");
@@ -142,6 +164,38 @@ const eventsByVenue = events.reduce<
             imageUrl: artistInfoButton.dataset.artistImageUrl,
             markdownDescription: artistInfoButton.dataset.artistDescription,
           });
+        }
+      });
+    }
+  });
+
+  const viewDetailsButtons = document.querySelectorAll(".view-details-button");
+  viewDetailsButtons.forEach((viewDetailsButton) => {
+    if (viewDetailsButton instanceof HTMLElement) {
+      viewDetailsButton.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        if (viewDetailsButton.dataset.eventId) {
+          document
+            .querySelectorAll(`.event-description-container`)
+            .forEach((container) => {
+              container.innerHTML = "";
+            });
+          const container = document.querySelectorAll(
+            `.event-description-container[data-event-id='${viewDetailsButton.dataset.eventId}']`
+          )[0];
+
+          if (container.dataset.eventDescription) {
+            container.innerHTML = marked.parse(
+              container.dataset.eventDescription
+            );
+          } else {
+            showArtistInfoModal({
+              name: container.dataset.artistName,
+              imageUrl: container.dataset.artistImageUrl,
+              markdownDescription: container.dataset.artistDescription,
+            });
+          }
         }
       });
     }
