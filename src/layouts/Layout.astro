@@ -12,22 +12,24 @@ import { pathnameToRoute } from "../utils";
     <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
     <title>Alternating Current 2025</title>
   </head>
-  <body>
+  <body class="flex flex-col">
     <Nav />
-    <slot />
-    {
-      pathnameToRoute(Astro.url.pathname) !== "/" ? (
-        <div class="fixed bottom-16 right-4">
-          <a
-            href="https://ra.co/events/2092497"
-            class="underline uppercase font-bold bg-[#E5AD35] p-2"
-            target="_blank"
-          >
-            Tickets
-          </a>
-        </div>
-      ) : null
-    }
+    <div class="flex-grow">
+      <slot />
+      {
+        pathnameToRoute(Astro.url.pathname) !== "/" ? (
+          <div class="fixed bottom-16 right-4">
+            <a
+              href="https://ra.co/events/2092497"
+              class="underline uppercase font-bold bg-[#E5AD35] p-2"
+              target="_blank"
+            >
+              Tickets
+            </a>
+          </div>
+        ) : null
+      }
+    </div>
     <footer class="mt-16 px-4 py-4 lg:px-64 text-sm">
       <p>Poster by Irene Mansoldo</p>
       <p>Website by Tewson Seeoun and Aiden Brady</p>
