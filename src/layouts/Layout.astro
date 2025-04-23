@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
+import { pathnameToRoute } from "../utils";
 ---
 
 <!doctype html>
@@ -14,6 +15,19 @@ import Nav from "../components/Nav.astro";
   <body>
     <Nav />
     <slot />
+    {
+      pathnameToRoute(Astro.url.pathname) !== "/" ? (
+        <div class="fixed bottom-4 right-4">
+          <a
+            href="https://ra.co/events/2092497"
+            class="underline uppercase font-bold bg-[#E5AD35] p-2"
+            target="_blank"
+          >
+            Tickets
+          </a>
+        </div>
+      ) : null
+    }
   </body>
 </html>
 
