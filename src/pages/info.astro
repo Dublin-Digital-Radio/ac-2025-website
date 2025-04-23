@@ -9,7 +9,8 @@ const venues = await fetch(
   `${import.meta.env.API_SERVER}/api/venues?populate=*`
 )
   .then((response) => response.json())
-  .then((response) => venueListSchema.parse(response.data));
+  .then((response) => venueListSchema.parse(response.data))
+  .then((venues) => venues.filter((venue) => Boolean(venue.googleMapsUrl)));
 ---
 
 <Layout>
@@ -29,14 +30,17 @@ const venues = await fetch(
           {venue.description ? (
             <div set:html={marked.parse(venue.description)} />
           ) : null}
+
           {venue.googleMapsUrl ? (
-            <iframe
-              src={venue.googleMapsUrl}
-              class="border-0 w-full h-[300px]"
-              allowfullscreen={false}
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            />
+            <div class="py-4">
+              <iframe
+                src={venue.googleMapsUrl}
+                class="border-0 w-full h-[300px]"
+                allowfullscreen={false}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              />
+            </div>
           ) : null}
         </>
       ))
