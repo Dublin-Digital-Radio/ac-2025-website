@@ -37,7 +37,7 @@ const eventSchema = z.object({
   id: z.number().transform((val) => val.toString()),
   name: z.string(),
   artists: artistListSchema,
-  venue: venueSchema,
+  venue: venueSchema.nullish(),
   description: z.string().nullable(),
   startsAt: z.string(),
   endsAt: z.string(),

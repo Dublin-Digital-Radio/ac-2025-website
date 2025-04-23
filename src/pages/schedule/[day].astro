@@ -53,12 +53,16 @@ const events = await fetch(
 const eventsByVenue = events.reduce<
   Record<string, z.infer<typeof eventListSchema>>
 >((accumulator, current) => {
-  return {
-    ...accumulator,
-    [current.venue.name]: accumulator[current.venue.name]
-      ? [...accumulator[current.venue.name], current]
-      : [current],
-  };
+  if (current.venue) {
+    return {
+      ...accumulator,
+      [current.venue.name]: accumulator[current.venue.name]
+        ? [...accumulator[current.venue.name], current]
+        : [current],
+    };
+  } else {
+    return accumulator;
+  }
 }, {});
 
 let startDateTimestamp;
@@ -123,10 +127,14 @@ const onlineBroadcastArtists = await fetch(
 
 const venues = Array.from(
   events.reduce<Venue[]>((accumulator, current) => {
-    if (accumulator.find((venue) => venue.name === current.venue.name)) {
-      return accumulator;
+    if (current.venue) {
+      if (accumulator.find((venue) => venue.name === current.venue?.name)) {
+        return accumulator;
+      } else {
+        return [...accumulator, current.venue];
+      }
     } else {
-      return [...accumulator, current.venue];
+      return accumulator;
     }
   }, [])
 )
