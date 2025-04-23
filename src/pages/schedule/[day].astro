@@ -187,9 +187,17 @@ const venues = Array.from(
           </h2>
           {venue.name !== onlineBroadcastingVenueName ? (
             <>
-              {eventsByVenue[venue.name].map((event) => (
-                <EventInfo event={event} />
-              ))}
+              {eventsByVenue[venue.name]
+                .toSorted((eventA, eventB) => {
+                  if (eventA.startsAt < eventB.startsAt) {
+                    return -1;
+                  } else {
+                    return 1;
+                  }
+                })
+                .map((event) => (
+                  <EventInfo event={event} />
+                ))}
             </>
           ) : onlineBroadcastArtists.length > 0 ? (
             <>
