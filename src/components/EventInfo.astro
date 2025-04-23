@@ -47,10 +47,14 @@ const { event } = Astro.props;
           Details
         </button>
         <div
-          class="event-description-container hidden bg-white p-2"
+          class="event-description-container grid overflow-hidden transition-all duration-250 ease-in-out grid-rows-[0fr] opacity-0"
           data-event-id={event.id}
-          set:html={marked.parse(event.description)}
-        />
+        >
+          <div
+            class="overflow-hidden bg-[#FCFCFE] p-2 mt-4"
+            set:html={marked.parse(event.description)}
+          />
+        </div>
       </>
     ) : null
   }

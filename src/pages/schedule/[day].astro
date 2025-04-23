@@ -266,14 +266,24 @@ const venues = Array.from(
           )[0];
 
           if (targetContainer instanceof HTMLDivElement) {
-            targetContainer.classList.toggle("hidden");
+            if (targetContainer.classList.contains("opacity-0")) {
+              targetContainer.classList.remove("opacity-0", "grid-rows-[0fr]");
+              targetContainer.classList.add("grid-rows-[1fr]", "opacity-100");
+            } else {
+              targetContainer.classList.remove(
+                "grid-rows-[1fr]",
+                "opacity-100"
+              );
+              targetContainer.classList.add("opacity-0", "grid-rows-[0fr]");
+            }
           }
 
           document
             .querySelectorAll(`.event-description-container`)
             .forEach((container) => {
               if (container !== targetContainer) {
-                container.classList.add("hidden");
+                container.classList.remove("grid-rows-[1fr]", "opacity-100");
+                container.classList.add("grid-rows-[0fr]", "opacity-0");
               }
             });
         }
