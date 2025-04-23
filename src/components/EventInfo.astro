@@ -31,17 +31,6 @@ const { event } = Astro.props;
         event.description ? (
           <>
             <h4>{event.name}</h4>
-            <button
-              class="view-details-button underline"
-              data-event-id={event.id}
-            >
-              Details
-            </button>
-            <div
-              class="event-description-container hidden bg-white p-2"
-              data-event-id={event.id}
-              set:html={marked.parse(event.description)}
-            />
           </>
         ) : (
           <ArtistInfoModalButton artist={event.artists[0]} class="underline">
@@ -51,4 +40,18 @@ const { event } = Astro.props;
       }
     </div>
   </div>
+  {
+    event.description ? (
+      <>
+        <button class="view-details-button underline" data-event-id={event.id}>
+          Details
+        </button>
+        <div
+          class="event-description-container hidden bg-white p-2"
+          data-event-id={event.id}
+          set:html={marked.parse(event.description)}
+        />
+      </>
+    ) : null
+  }
 </div>
