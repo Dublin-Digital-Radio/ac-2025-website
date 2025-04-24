@@ -7,12 +7,21 @@ export const artistSchema = z.object({
   image: z
     .object({
       formats: z.object({
-        small: z.object({
-          url: z.string(),
-        }),
-        medium: z.object({
-          url: z.string(),
-        }),
+        thumbnail: z
+          .object({
+            url: z.string(),
+          })
+          .optional(),
+        small: z
+          .object({
+            url: z.string(),
+          })
+          .optional(),
+        medium: z
+          .object({
+            url: z.string(),
+          })
+          .optional(),
       }),
     })
     .nullish(),

@@ -1,6 +1,7 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import type { Artist } from "../../api";
+import { getArtistImageUrl } from "../../utils";
 
 interface Props {
   artist: Artist;
@@ -15,9 +16,7 @@ const { artist, class: className } = Astro.props;
   href={`#${artist.name}`}
   class={`artist-info-button ${className}`}
   data-artist-name={artist.name}
-  data-artist-image-url={artist.image?.formats.medium
-    ? `${import.meta.env.API_SERVER}${artist.image.formats.medium.url}`
-    : ""}
+  data-artist-image-url={getArtistImageUrl(artist) ?? ""}
   data-artist-description={artist.description}
 >
   <slot />
