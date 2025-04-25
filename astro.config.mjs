@@ -3,11 +3,11 @@ import { defineConfig } from "astro/config";
 
 import tailwindcss from "@tailwindcss/vite";
 
-const base = "ac-2025-website";
+const base = "alternating-current-2025";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://dublin-digital-radio.github.io",
+  site: "https://listen.dublindigitalradio.com",
   base,
   redirects: {
     "/schedule": `/${base}/schedule/may-1`,
