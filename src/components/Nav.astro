@@ -7,17 +7,12 @@ const routes = [
     href: "/",
     text: "Home",
   },
-  // {
-  //   href: "https://ra.co/events/2092497",
-  //   text: "Tickets",
-  //   target: "_blank",
-  // },
   {
     href: "/line-up",
     text: "Line-Up",
   },
   {
-    href: "/schedule",
+    href: "/schedule/may-1",
     text: "Schedule",
   },
   {
@@ -33,12 +28,17 @@ const routes = [
       routes.map((route) => (
         <li class="me-4">
           <Link
+            id={route.text === "Schedule" ? "schedule-link" : undefined}
             href={route.href}
             class:list={[
               "lowercase",
               {
                 "font-bold decoration-double decoration-[#E5AD35] underline underline-offset-4":
-                  pathnameToRoute(Astro.url.pathname) === route.href,
+                  pathnameToRoute(Astro.url.pathname) === "/"
+                    ? route.href === "/"
+                    : route.href.startsWith(
+                        pathnameToRoute(Astro.url.pathname)
+                      ),
               },
             ]}
           >
@@ -49,3 +49,29 @@ const routes = [
     }
   </ul>
 </nav>
+
+<script>
+  const scheduleLinkElement = document.getElementById("schedule-link");
+  if (scheduleLinkElement instanceof HTMLAnchorElement) {
+    switch (new Date().toISOString().split("T")[0]) {
+      case "2025-05-02":
+        scheduleLinkElement.href = scheduleLinkElement.href.replace(
+          "may-1",
+          "may-2"
+        );
+        break;
+      case "2025-05-03":
+        scheduleLinkElement.href = scheduleLinkElement.href.replace(
+          "may-1",
+          "may-2"
+        );
+        break;
+      case "2025-05-04":
+        scheduleLinkElement.href = scheduleLinkElement.href.replace(
+          "may-1",
+          "may-2"
+        );
+        break;
+    }
+  }
+</script>
