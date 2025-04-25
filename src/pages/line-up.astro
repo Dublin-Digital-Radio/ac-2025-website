@@ -1,4 +1,6 @@
 ---
+import qs from "qs";
+
 import Layout from "../layouts/Layout.astro";
 import { artistListSchema } from "../api";
 import PageContainer from "../components/PageContainer.astro";
@@ -6,7 +8,13 @@ import ArtistInfoModal from "../components/artist-info-modal/ArtistInfoModal.ast
 import ArtistInfoModalButton from "../components/artist-info-modal/ArtistInfoModalButton.astro";
 
 const artists = await fetch(
-  `${import.meta.env.API_SERVER}/api/artists?populate=*`
+  `${import.meta.env.API_SERVER}/api/artists?${qs.stringify({
+    populate: "*",
+    pagination: {
+      page: 0,
+      pageSize: 100,
+    },
+  })}`
 )
   .then((response) => response.json())
   .then((response) => artistListSchema.parse(response.data))
