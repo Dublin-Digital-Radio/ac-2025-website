@@ -1,9 +1,14 @@
-<dialog id="dialog">
+<dialog
+  id="dialog"
+  class="rounded-md bg-white w-4/5 max-w-[800px] max-h-3/4 p-4 m-auto"
+>
   <form method="dialog">
-    <div class="container">
-      <img id="dialog-image" class="artist_img" />
-      <h1 id="dialog-name"></h1>
-      <div id="dialog-description" class="text"></div>
+    <div class="flex flex-col lg:flex-row lg:items-start">
+      <img id="dialog-image" class="object-contain lg:max-w-1/2" />
+      <div class="flex flex-col lg:px-8">
+        <h1 id="dialog-name"></h1>
+        <div id="dialog-description" class="text"></div>
+      </div>
     </div>
   </form>
 </dialog>

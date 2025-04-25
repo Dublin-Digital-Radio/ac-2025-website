@@ -1,5 +1,5 @@
 ---
-import { pathnameToRoute } from "../utils";
+import { pathnameToRoute, responsiveContainerClassname } from "../utils";
 import Link from "./Link.astro";
 
 const routes = [
@@ -27,7 +27,7 @@ const routes = [
 ];
 ---
 
-<nav class="px-4 lg:px-64 py-4">
+<nav class:list={["py-4", responsiveContainerClassname]}>
   <ul class="flex">
     {
       routes.map((route) => (

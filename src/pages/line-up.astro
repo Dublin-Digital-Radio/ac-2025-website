@@ -5,8 +5,6 @@ import PageContainer from "../components/PageContainer.astro";
 import ArtistInfoModal from "../components/artist-info-modal/ArtistInfoModal.astro";
 import ArtistInfoModalButton from "../components/artist-info-modal/ArtistInfoModalButton.astro";
 
-import "../components/artist-info-modal/artist-info-modal.css";
-
 const artists = await fetch(
   `${import.meta.env.API_SERVER}/api/artists?populate=*`
 )

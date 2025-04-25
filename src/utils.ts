@@ -1,5 +1,7 @@
 import type { Artist } from "./api";
 
+export const responsiveContainerClassname = "px-4 lg:w-[600px] lg:m-auto";
+
 export function pathnameToRoute(pathname: string) {
   const pathnameWithoutBase = pathname.replace(import.meta.env.BASE_URL, "");
 
@@ -18,16 +20,17 @@ export function pathnameToRoute(pathname: string) {
 
 export function getArtistImageUrl(artist: Artist) {
   let path: string | undefined;
-  if (artist.image?.formats.medium?.url) {
-    path = artist.image.formats.medium.url;
+
+  if (artist.image?.formats.thumbnail?.url) {
+    path = artist.image.formats.thumbnail.url;
   }
 
   if (artist.image?.formats.small?.url) {
     path = artist.image.formats.small.url;
   }
 
-  if (artist.image?.formats.thumbnail?.url) {
-    path = artist.image.formats.thumbnail.url;
+  if (artist.image?.formats.medium?.url) {
+    path = artist.image.formats.medium.url;
   }
 
   if (path) {

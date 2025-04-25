@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
-import { pathnameToRoute } from "../utils";
+import { pathnameToRoute, responsiveContainerClassname } from "../utils";
 ---
 
 <!doctype html>
@@ -30,7 +30,7 @@ import { pathnameToRoute } from "../utils";
         ) : null
       }
     </div>
-    <footer class="mt-16 px-4 py-4 lg:px-64 text-sm">
+    <footer class:list={["mt-16 py-4 text-sm", responsiveContainerClassname]}>
       <p>Poster by Irene Mansoldo</p>
       <p>Website by Tewson Seeoun and Aiden Brady</p>
     </footer>

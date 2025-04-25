@@ -1,1 +1,5 @@
-<main class="px-4 lg:px-64"><slot /></main>
+---
+import { responsiveContainerClassname } from "../utils";
+---
+
+<main class={responsiveContainerClassname}><slot /></main>
