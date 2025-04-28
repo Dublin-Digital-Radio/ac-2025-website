@@ -10,7 +10,17 @@ const venues = await fetch(
 )
   .then((response) => response.json())
   .then((response) => venueListSchema.parse(response.data))
-  .then((venues) => venues.filter((venue) => Boolean(venue.googleMapsUrl)));
+  .then((venues) =>
+    venues
+      .filter((venue) => Boolean(venue.googleMapsUrl))
+      .toSorted((venueA, venueB) => {
+        if (venueA.order < venueB.order) {
+          return -1;
+        } else {
+          return 1;
+        }
+      })
+  );
 ---
 
 <Layout>
@@ -23,6 +33,7 @@ const venues = await fetch(
       & The Complex, Depot. Interventions and broadcasts will take place at Flux
       Studios & Gallery.
     </p>
+    <h1>Venues</h1>
     {
       venues.map((venue) => (
         <>
