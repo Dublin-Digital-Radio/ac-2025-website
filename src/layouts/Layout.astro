@@ -18,10 +18,10 @@ import { pathnameToRoute, responsiveContainerClassname } from "../utils";
       <slot />
       {
         pathnameToRoute(Astro.url.pathname) !== "/" ? (
-          <div class="fixed bottom-16 right-4">
+          <div class="fixed bottom-16 right-0 pr-4 lg:pr-80 bg-[#E5AD35] p-2">
             <a
               href="https://ra.co/events/2092497"
-              class="underline uppercase font-bold bg-[#E5AD35] p-2"
+              class="underline uppercase font-bold  "
               target="_blank"
             >
               Tickets
