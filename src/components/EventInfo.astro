@@ -17,12 +17,16 @@ const { event } = Astro.props;
     <div class="flex-1 pr-4">
       <h4>
         {
-          DateTime.fromISO(event.startsAt).toLocaleString(
-            DateTime.TIME_24_SIMPLE
-          )
+          DateTime.fromISO(event.startsAt)
+            .setZone("Europe/Dublin")
+            .toLocaleString(DateTime.TIME_24_SIMPLE)
         }{" "}
         -{" "}
-        {DateTime.fromISO(event.endsAt).toLocaleString(DateTime.TIME_24_SIMPLE)}
+        {
+          DateTime.fromISO(event.endsAt)
+            .setZone("Europe/Dublin")
+            .toLocaleString(DateTime.TIME_24_SIMPLE)
+        }
       </h4>
     </div>
     <div class="w-2/3">
