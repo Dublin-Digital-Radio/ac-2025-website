@@ -9,7 +9,6 @@ const base = "alternating-current-2025";
 export default defineConfig({
   site: "https://listen.dublindigitalradio.com",
   base,
-  trailingSlash: "never",
   vite: {
     plugins: [tailwindcss()],
   },
