@@ -37,3 +37,10 @@ export function getArtistImageUrl(artist: Artist) {
     return `${import.meta.env.API_SERVER}${path}`;
   }
 }
+
+export const onlineBroadcastingShowNameSuffix = "~ Alternating Current";
+
+export function formatOnlineBroadcastingShowName(name: string) {
+  const lastIndex = name.lastIndexOf(onlineBroadcastingShowNameSuffix);
+  return name.slice(0, lastIndex);
+}
