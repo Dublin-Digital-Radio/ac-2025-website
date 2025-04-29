@@ -42,5 +42,5 @@ export const onlineBroadcastingShowNameSuffix = "~ Alternating Current";
 
 export function formatOnlineBroadcastingShowName(name: string) {
   const lastIndex = name.lastIndexOf(onlineBroadcastingShowNameSuffix);
-  return name.slice(0, lastIndex);
+  return name.slice(0, lastIndex).trim();
 }
