@@ -55,7 +55,7 @@ const { event } = Astro.props;
           data-event-id={event.id}
         >
           <div
-            class="overflow-hidden bg-[#FCFCFE] p-2 mt-4"
+            class="overflow-hidden prose bg-[#FCFCFE] p-2 mt-4"
             set:html={marked.parse(event.description)}
           />
         </div>
