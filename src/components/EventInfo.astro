@@ -47,7 +47,10 @@ const { event } = Astro.props;
   {
     event.description ? (
       <>
-        <button class="view-details-button underline" data-event-id={event.id}>
+        <button
+          class="view-details-button underline hover:cursor-pointer"
+          data-event-id={event.id}
+        >
           Details
         </button>
         <div
