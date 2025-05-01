@@ -48,8 +48,8 @@ const eventSchema = z.object({
   artists: artistListSchema,
   venue: venueSchema.nullish(),
   description: z.string().nullable(),
-  startsAt: z.string(),
-  endsAt: z.string(),
+  startsAt: z.string().nullable(),
+  endsAt: z.string().nullable(),
 });
 
 export type Event = z.infer<typeof eventSchema>;

@@ -115,6 +115,10 @@ const onlineBroadcastShows = await fetch(
       })
   );
 
+const eventsMatchingBroadcastShows = events.filter((event) => {
+  return onlineBroadcastShows.find((show) => show.title === event.name);
+});
+
 const onlineBroadcastArtists = await fetch(
   `${import.meta.env.API_SERVER}/api/artists?${qs.stringify({
     populate: "*",
@@ -189,7 +193,11 @@ const venues = Array.from(
               <>
                 {(eventsByVenue[venue.name] ?? [])
                   .toSorted((eventA, eventB) => {
-                    if (eventA.startsAt < eventB.startsAt) {
+                    if (
+                      eventA.startsAt &&
+                      eventB.startsAt &&
+                      eventA.startsAt < eventB.startsAt
+                    ) {
                       return -1;
                     } else {
                       return 1;
@@ -202,16 +210,23 @@ const venues = Array.from(
             ) : (
               <>
                 {onlineBroadcastShows.map((show) => {
-                  const matchedArtist = onlineBroadcastArtists.find(
-                    (artist) => artist.name === show.title
+                  const matchedEvent = eventsMatchingBroadcastShows.find(
+                    (event) => event.name === show.title
                   );
+                  const matchedArtist =
+                    matchedEvent?.artists[0] ??
+                    onlineBroadcastArtists.find(
+                      (artist) => artist.name === show.title
+                    );
 
                   return (
                     <EventInfo
                       event={{
                         id: `online-broadcasting-${matchedArtist ? matchedArtist.id : show.title}`,
-                        name: matchedArtist ? matchedArtist.name : show.title,
-                        description: null, // Force to use artist description
+                        name: show.title,
+                        description: matchedEvent
+                          ? matchedEvent.description
+                          : null, // Force to use artist description
                         artists: matchedArtist ? [matchedArtist] : [],
                         startsAt: show.start,
                         endsAt: show.end,
