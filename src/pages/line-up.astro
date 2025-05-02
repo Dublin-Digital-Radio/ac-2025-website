@@ -19,13 +19,9 @@ const artists = await fetch(
   .then((response) => response.json())
   .then((response) => artistListSchema.parse(response.data))
   .then((list) =>
-    list.toSorted((a, b) => {
-      if (a.name < b.name) {
-        return -1;
-      } else {
-        return 1;
-      }
-    })
+    list.toSorted((a, b) =>
+      a.name.localeCompare(b.name, "en", { sensitivity: "base" })
+    )
   );
 ---
 
