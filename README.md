@@ -1,3 +1,5 @@
+This repository has been moved to https://codeberg.org/Dublin-Digital-Radio/ac-2025-website.
+
 # Astro Starter Kit: Basics
 
 ```sh
